@@ -15,7 +15,7 @@ pipeline {
                 }
             }
         }
-        stage("build") {
+        stage( "build") {
             
             
             steps{
@@ -27,8 +27,8 @@ pipeline {
         }   
         
         stage ("test") {
-            steps{
-                script{
+            steps { 
+                script {
                     gv.testApp
                 }
             }
