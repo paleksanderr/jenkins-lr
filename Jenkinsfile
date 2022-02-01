@@ -16,11 +16,7 @@ pipeline {
             }
         }
         stage("build") {
-             when {
-                expression {
-                    params.executeTests
-                }
-            }
+            
             
             steps{
                 script {
