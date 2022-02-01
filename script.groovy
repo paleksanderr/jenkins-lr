@@ -1,19 +1,56 @@
-def buildJar() {
-    echo "building the application..."
-    sh 'mvn package'
-} 
+def gv
 
-def buildImage() {
-    echo "building the docker image..."
-    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-        sh 'docker build -t nanajanashia/demo-app:jma-2.0 .'
-        sh "echo $PASS | docker login -u $USER --password-stdin"
-        sh 'docker push nanajanashia/demo-app:jma-2.0'
+pipeline {
+    agent any
+    parametrs {
+        choice(name: 'VERSION', choices: ['1.1.0', "1.2.0", "1.3.0"], description: '')
+        boolenParam(name: 'executeTest', defaultValue: true, description: '')
     }
-} 
 
-def deployApp() {
-    echo 'deploying the application...'
-} 
+    stages {
+        stage("init") {
+            steps {
+                script {
+                    gv = load "script.groovy"
+                }
+            }
+        }
+        stage('build') {
+             when {
+                expression {
+                    params.executeTests
+                }
+            }
+            
+            steps{
+                script {
+                    gv.buildApp()
+                }
+                echo 'Testing the app...'
+            }
+        }   
+        }
+        stage('test') {
+             
+            steps {
+                script {
+                    gv.testApp()
+                }
+                echo 'Deploying....'
 
-return this
+            }
+        stage('deploy') {
+             
+            steps {
+                script {
+                    gv.deployApp()
+                }
+                echo 'Deploying....'
+
+            }
+
+
+      
+    }
+    
+}

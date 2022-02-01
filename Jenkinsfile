@@ -2,6 +2,11 @@ def gv
 
 pipeline {
     agent any
+    parametrs {
+        choice(name: 'VERSION', choices: ['1.1.0', "1.2.0", "1.3.0"], description: '')
+        boolenParam(name: 'executeTest', defaultValue: true, description: '')
+    }
+
     stages {
         stage("init") {
             steps {
@@ -10,29 +15,42 @@ pipeline {
                 }
             }
         }
-        stage("build jar") {
-            steps {
-                script {
-                    echo "building jar"
-                    //gv.buildJar()
+        stage('build') {
+             when {
+                expression {
+                    params.executeTests
                 }
             }
+            
+            steps{
+                script {
+                    gv.buildApp()
+                }
+                echo 'Testing the app...'
+            }
+        }   
         }
-        stage("build image") {
+        stage('test') {
+             
             steps {
                 script {
-                    echo "building image"
-                    //gv.buildImage()
+                    gv.testApp()
                 }
+                echo 'Deploying....'
+
             }
-        }
-        stage("deploy") {
+        stage('deploy') {
+             
             steps {
                 script {
-                    echo "deploying"
-                    //gv.deployApp()
+                    gv.deployApp()
                 }
+                echo 'Deploying....'
+
             }
-        }
-    }   
+
+
+      
+    }
+    
 }
