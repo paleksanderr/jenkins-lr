@@ -13,17 +13,19 @@ pipeline {
             }
         }
     
-        stage('Build Docker image') {
+         stage('build image') {
             steps {
-                script{
-                    echo 'Bulding the Docker image....'
-                    withCredentials([usernamePassword(credentialsId: 'docer-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')])
-                       sh 'Docker build -t paleksander/siwy:jma-2.0 .'
-                       sh "echo $PASS | Docker login -u $USER , --password-stdin"
-                       sh 'Docker push paleksander/siwy:jma-2.0'
+                script {
+                    echo "building the docker image..."
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh "docker build -t paleksander/siwy:${IMAGE_NAME} ."
+                        sh "echo $PASS | docker login -u $USER --password-stdin"
+                        sh "docker push nanajanashia/demo-app:${IMAGE_NAME}"
+                    }
                 }
             }
         }
+
         
         stage('Deploy') {
             steps {
