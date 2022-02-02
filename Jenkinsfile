@@ -6,8 +6,7 @@ pipeline {
     tools {
         maven 'Maven-3.6'
     }
-        
-                          
+    stages {
         stage("init") {
             steps {
                 script {
