@@ -1,3 +1,4 @@
+def = 
 pipeline {
     agent any
     tools {
@@ -12,8 +13,7 @@ pipeline {
                 }
             }
         }
-    
-         stage('build image') {
+        stage('build image') {
             steps {
                 script {
                     echo "building the docker image..."
