@@ -1,37 +1,39 @@
-def = 
+def gv
+
 pipeline {
     agent any
     tools {
-       maven 'Maven-3.6'
+        maven 'Maven-3.6'
     }
-    stages {
-        stage('Build jar') {
-            steps {
-                script{
-                    echo 'Bulding the application...'
-                    sh 'mvn package'
-                }
-            }
-        }
-        stage('build image') {
+        
+                          
+        stage("init") {
             steps {
                 script {
-                    echo "building the docker image..."
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh "docker build -t paleksander/siwy:fff ."
-                        sh "echo $PASS | docker login -u $USER --password-stdin"
-                        sh "docker push nanajanashia/demo-app:fff"
-                    }
+                    gv = load "script.groovy"
                 }
             }
         }
-
-        
-        stage('Deploy') {
+        stage("build jar") {
             steps {
-                script{
-                    echo 'Deploying the application'
+                script {
+                    gv.buildJar()
+                }
+            }
+        }
+        stage("build image") {
+            steps {
+                script {
+                    gv.buildImage()
+                }
+            }
+        }
+        stage("deploy") {
+            steps {
+                script {
+                    gv.deployApp()
                 }
             }
         }
     }
+}
