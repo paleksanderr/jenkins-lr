@@ -17,7 +17,10 @@ pipeline {
             steps {
                 script{
                     echo 'Bulding the Docker image....'
-                    sshagent(credentials: [1])
+                    withCredentials([usernamePassword(credentialsId: 'docer-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')])
+                       sh 'Docker build -t paleksander/siwy:jma-2.0 .'
+                       sh "echo $PASS | Docker login -u $USER , --password-stdin"
+                       sh 'Docker push paleksander/siwy:jma-2.0'
                 }
             }
         }
