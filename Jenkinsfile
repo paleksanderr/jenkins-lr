@@ -19,7 +19,7 @@ pipeline {
                     echo "Bulding the Docker image...."
                     withCredentials([usernamePassword(credentialsId: 'docer-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')])
                     {
-                       sh 'Docker build -t paleksander/siwy:jma-2.0 .'
+                       sh 'Docker build -t -f paleksander/siwy:jma-2.0 .'
                        sh "echo $PASS | Docker login -u $USER , --password-stdin"
                        sh 'Docker push paleksander/siwy:jma-2.0'
                     }
