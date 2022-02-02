@@ -1,4 +1,4 @@
-def = 
+ 
 pipeline {
     agent any
     tools {
