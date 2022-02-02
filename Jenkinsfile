@@ -24,11 +24,11 @@ pipeline {
                 }
             }
         }
-        stage('deploy') {
+        sstage('Deploy') {
             steps {
-                script {
-                    echo 'deploying docker image to EC2...'
+                script{
+                    echo 'Deploying the application'
                 }
             }
         }
-
+    }
