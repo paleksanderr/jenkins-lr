@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    tolls {
+    tools {
        maven 'Maven-3.6'
     }
     stages {
