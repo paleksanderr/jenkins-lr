@@ -20,7 +20,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'docer-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                         sh "docker build -t paleksander/siwy:fff ."
                         sh "echo $PASS | docker login -u $USER --password-stdin"
-                        sh "docker push nanajanashia/demo-app:fff"
+                        sh "docker push paleksander/siwy:fff"
                     }
                 }
             }
