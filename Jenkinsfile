@@ -23,12 +23,17 @@ pipeline {
                 }
             }
         }
-        stage("build image") {
+        stage("build and push image") {
             steps {
                 script {
 
                     buildImage('paleksander/siwy:test-1.3')
+<<<<<<< HEAD
+                    dockerLogin()
+                    dockerPush 'paleksander/siwy:test-1.3'
+=======
 
+>>>>>>> 5bf0fdf7249f58b2ada96e80a5a2ea525181646d
                 }
             }
         }
