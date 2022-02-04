@@ -26,7 +26,7 @@ pipeline {
         stage("build image") {
             steps {
                 script {
-                    buildImage()
+                    buildImage('paleksander/siwy:test-1.3')
                 }
             }
         }
