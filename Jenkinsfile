@@ -27,13 +27,10 @@ pipeline {
             steps {
                 script {
 
-                    buildImage('paleksander/siwy:test-1.3')
-<<<<<<< HEAD
+                    buildImage 'paleksander/siwy:test-1.3'
                     dockerLogin()
                     dockerPush 'paleksander/siwy:test-1.3'
-=======
 
->>>>>>> 5bf0fdf7249f58b2ada96e80a5a2ea525181646d
                 }
             }
         }
