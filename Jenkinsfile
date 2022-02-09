@@ -59,17 +59,7 @@ pipeline {
                     steps {
                         script {
                             withCredentials([usernamePassword(credentialsId: 'git2', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-
-
-
                             sh "git remote set-url origin https://${USER}:${PASS}@gitlab.com/pawel.aleksander/jenkins-lr.git"
-
-
-
-
-
-
-
                             sh 'git add .'
                             sh 'git commit -m "caly pipeline zrobiony!!!"'
                             sh 'git push origin HEAD:main'
