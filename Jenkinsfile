@@ -9,6 +9,19 @@ pipeline {
         maven 'Maven-3.6'
     }
     stages {
+          stage("increment version") {
+                    steps {
+                        script {
+                            echo 'incremeting app version...'
+                            sh 'mvn build-helper:parse-version versions:set \
+                            -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
+                            versions:commit'
+                            def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
+                            def version = matcher[0][1]
+                            env.IMAGE_NAME = "$version-$BUILD_NUMBER"
+                        }
+                    }
+                }
         stage("init") {
             steps {
                 script {
@@ -20,6 +33,7 @@ pipeline {
             steps {
                 script {
                     buildJar()
+                    sh 'mvn clean package'
                 }
             }
         }
@@ -27,9 +41,9 @@ pipeline {
             steps {
                 script {
 
-                    buildImage 'paleksander/siwy:test-1.3'
+                    buildImage "paleksander/siwy:$IMAGE_NAME"
                     dockerLogin()
-                    dockerPush 'paleksander/siwy:test-1.3'
+                    dockerPush "paleksander/siwy:$IMAGE_NAME"
 
                 }
             }
@@ -41,5 +55,28 @@ pipeline {
                 }
             }
         }
+         stage("commit version update") {
+                    steps {
+                        script {
+                            withCredentials([usernamePassword(credentialsId: 'git2', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+
+
+
+                            sh "git remote set-url origin https://${USER}:${PASS}@gitlab.com/pawel.aleksander/jenkins-lr.git"
+
+
+
+
+
+
+
+                            sh 'git add .'
+                            sh 'git commit -m "caly pipeline zrobiony!!!"'
+                            sh 'git push origin HEAD:main'
+                            }
+                        }
+                    }
+         }
+
     }
 }
